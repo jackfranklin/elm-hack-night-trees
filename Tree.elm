@@ -1,9 +1,9 @@
-module Tree where
+module Tree (..) where
 
 
 type Tree a
-    = Empty
-    | Node a (Tree a) (Tree a)
+  = Empty
+  | Node a (Tree a) (Tree a)
 
 
 empty : Tree a
@@ -11,82 +11,13 @@ empty =
   Empty
 
 
-singleton : a -> Tree a
-singleton val =
-  Node val Empty Empty
 
-
-insert : comparable -> Tree comparable -> Tree comparable
-insert newValue tree =
-  case tree of
-    Empty -> singleton newValue
-    Node value leftTree rightTree ->
-      if value == newValue then
-        tree
-      else if value > newValue then
-        Node value (insert newValue leftTree) rightTree
-      else
-        Node value leftTree (insert newValue rightTree)
-
-
-fromList : List comparable -> Tree comparable
-fromList list =
-  List.foldl insert empty list
-
-
-depth : Tree a -> Int
-depth tree =
-  case tree of
-    Empty -> 0
-    Node _ leftTree rightTree ->
-      1 + max (depth leftTree) (depth rightTree)
-
-
-map : (a -> b) -> Tree a -> Tree b
-map func tree =
-   case tree of
-     Empty -> Empty
-     Node x t1 t2 ->
-       Node (func x) (map func t1) (map func t2)
-
-sum : Tree number -> number
-sum tree =
-  fold (+) 0 tree
-  -- case tree of
-  --   Empty -> 0
-  --   Node x t1 t2 ->
-  --     x + (sum t1) + (sum t2)
-
-flatten : Tree a -> List a
-flatten tree =
-  fold (::) [] tree
-  -- case tree of
-  --   Empty -> []
-  --   Node x t1 t2 ->
-  --     (flatten t1) ++ [x] ++ (flatten t2)
-
-contains : a -> Tree a -> Bool
-contains x tree =
-  fold (\y acc -> y == x || acc) False tree
-  -- case tree of
-  --   Empty -> False
-  --   Node val t1 t2 ->
-  --     if val == x then
-  --       True
-  --     else
-  --       (contains x t1) || (contains x t2)
-
-fold : (a -> b -> b) -> b -> Tree a -> b
-fold func accumulator tree =
-  -- List.foldl func accumulator (flatten tree)
-  case tree of
-    Empty -> accumulator
-    Node x t1 t2 ->
-      fold func (fold func (func x accumulator) t1) t2
-
-
-
-{-----------------------------------------------------------------
+-- singleton : a -> Tree a
+-- insert : comparable -> Tree comparable -> Tree comparable
+-- fromList : List comparable -> Tree comparable
+-- depth : Tree a -> Int
+-- map : (a -> b) -> Tree a -> Tree b
+{- ----------------------------------------------------------------
 
 Exercises:
 
@@ -123,4 +54,5 @@ Exercises:
     tree: pre-order, in-order, post-order, depth-first, etc.
     More info at: http://en.wikipedia.org/wiki/Tree_traversal
 
------------------------------------------------------------------}
+----------------------------------------------------------------
+-}
